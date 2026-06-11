@@ -10,12 +10,20 @@
 
 サンプル出力: [output/books.csv](output/books.csv)
 
-## 使い方
+## 環境構築
 
-```bash
+```powershell
+# 仮想環境の作成と有効化(Windows / PowerShell)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
 # 必要ライブラリのインストール(初回のみ)
 pip install -r requirements.txt
+```
 
+## 使い方
+
+```powershell
 # 全ページを取得
 python scraper.py
 
@@ -33,7 +41,7 @@ python scraper.py --pages 3 --output output/test.csv
 
 ## 動作環境
 
-- Python 3.10以上
+- Windows / Python 3.10以上
 - requests / beautifulsoup4(requirements.txt参照)
 
 ## ファイル構成
