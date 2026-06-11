@@ -29,6 +29,9 @@ def fetch_page(url: str) -> str | None:
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
+            # サーバーがcharsetを宣言していないため文字コードを明示する
+            # (これがないと £ が Â£ に化ける)
+            response.encoding = "utf-8"
             return response.text
         except requests.RequestException as e:
             print(f"  通信エラー({attempt}/{MAX_RETRIES}回目): {e}")
@@ -62,7 +65,8 @@ def parse_books(html: str) -> list[dict]:
 
 def save_csv(books: list[dict], filepath: str) -> None:
     """書籍情報をCSVに保存する。utf-8-sigでExcelの文字化けを防ぐ。"""
-    Path(filepath).parent.mkdir(parents=True, exist_ok=True)  # ← これを追加
+    # 出力先フォルダが存在しなければ自動で作成する
+    Path(filepath).parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["title", "price", "rating", "availability", "url"]
     with open(filepath, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
