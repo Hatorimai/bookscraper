@@ -39,6 +39,26 @@ python scraper.py --pages 3 --output output/test.csv
 - **出力フォルダの自動作成**: 出力先のフォルダが存在しない場合は自動で作成します
 - **進捗表示**: 処理中のページ番号を表示し、長時間の実行でも状況が分かるようにしています
 
+## 技術の選び方
+
+- **requests + BeautifulSoup**: 対象が JavaScript を使わない静的なページなので、ブラウザを動かすより軽く、速いため
+
+## テスト
+
+保存したHTML(`tests/fixtures/page.html`)を使い、実際のサイトにはアクセスせずに次の2点を `pytest` で確かめています。GitHub Actions で push のたびに自動実行します。
+
+- 書名・価格・星評価・在庫状況・詳細ページのURLを正しく取り出せること
+- 出力先のフォルダを自動で作り、Excel で文字化けしない BOM 付き UTF-8 の CSV を書くこと
+
+```powershell
+pip install pytest
+pytest
+```
+
+## 開発の進め方
+
+AIコーディングツールを使って開発しています。動作は上のテストと、実行結果のCSVで確認しています。
+
 ## 動作環境
 
 - Windows / Python 3.10以上
@@ -50,6 +70,8 @@ python scraper.py --pages 3 --output output/test.csv
 bookscraper/
 ├── scraper.py        # スクレイピング本体
 ├── requirements.txt  # 必要ライブラリ
+├── tests/            # pytest のテスト(保存したHTMLを使う)
+├── .github/workflows/ # GitHub Actions(テストの自動実行)
 ├── output/
 │   └── books.csv     # 実行結果のサンプル
 └── images/
